@@ -1,0 +1,8 @@
+name: SentinelAutoClick
+version: '${project.version}'
+main: github.andredimaz.sentinel.autoclick.Main
+authors: [ dimaz ]
+commands:
+  autoclick:
+    description: Ativa ou desativa o autoclick.
+    aliases: ac
