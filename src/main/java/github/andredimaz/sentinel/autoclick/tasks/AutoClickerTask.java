@@ -1,7 +1,6 @@
 package github.andredimaz.sentinel.autoclick.tasks;
 
 import github.andredimaz.sentinel.autoclick.Main;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -28,32 +27,14 @@ public class AutoClickerTask extends BukkitRunnable {
         }
 
         ItemStack itemInHand = player.getInventory().getItemInHand();
-        double damage = getItemDamage(itemInHand.getType());
 
         for (Entity entity : player.getNearbyEntities(5, 5, 5)) {
             if (entity instanceof LivingEntity && !(entity instanceof Player)) {
                 LivingEntity target = (LivingEntity) entity;
                 if (!plugin.isBlacklisted(target.getType())) {
-                    target.damage(damage, player);
+                    target.damage(itemInHand.getType().getMaxDurability(), player);
                 }
             }
-        }
-    }
-
-    private double getItemDamage(Material material) {
-        switch (material) {
-            case WOOD_SWORD:
-                return 4;
-            case STONE_SWORD:
-                return 5;
-            case IRON_SWORD:
-                return 6;
-            case DIAMOND_SWORD:
-                return 7;
-            case GOLD_SWORD:
-                return 4;
-            default:
-                return 1; // Dano padrão para outros itens
         }
     }
 }
