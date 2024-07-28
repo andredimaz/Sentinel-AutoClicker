@@ -19,6 +19,7 @@ Nenhuma
 | :---------- | :--------- | :---------------------------------- |
 | `{status}` | `interna` | Retorna o status do autoclicker. |
 | `{cooldown}` | `interna` | Retorna o cooldown atual do jogador. |
+| `{range}` | `interna` | Retorna o range atual do jogador. |
 
 
 
@@ -26,6 +27,7 @@ Nenhuma
 
 - Menu de Gerenciamento.
 - Cooldown por permissão.
+- Range por permissão.
 
 
 ## FAQ
@@ -36,7 +38,7 @@ Sim, será adicionado novas funcionalidades no futuro.
 
 ### Que funcionalidades serão adicionadas?
 
-Será adicionado sistema de range juntamente com sistema de melhorias (cooldown e range).
+Está nos planos um sistema de melhorias.
 
 ### Como posso contactar?
 
@@ -51,14 +53,16 @@ mobs-blacklist:
   - 'COW'
   - 'CHICKEN'
 
-cooldown:
+grupos:
   vip:
     ordem: 1
     cooldown: 1
+    range: 1
     permissao: ''
   default:
     ordem: 2
     cooldown: 1
+    range: 1
     permissao: ''
 
 menu:
@@ -74,6 +78,7 @@ menu:
       - '&7um único botão.'
       - ''
       - '&f Delay: &7{cooldown} segundos'
+      - '&f Range: &7{range}x{range}'
       - ''
       - '&fClique para {status}&f.'
   #item1:  É possivel criar itens de decoração
