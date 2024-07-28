@@ -106,4 +106,4 @@ status:
 
 ## Exemplos de como pode ser usado.
 
- ![Menu](https://imgur.com/t8wOg5R.png)
+ ![Menu](https://imgur.com/xyVXBdB.png)
