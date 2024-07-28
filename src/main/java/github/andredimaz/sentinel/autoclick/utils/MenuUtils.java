@@ -1,6 +1,5 @@
 package github.andredimaz.sentinel.autoclick.utils;
 
-
 import github.andredimaz.sentinel.autoclick.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -74,14 +73,20 @@ public class MenuUtils {
         String status = isAutoClickerActive
                 ? plugin.getConfig().getString("status.desativar", "&cDesativar")
                 : plugin.getConfig().getString("status.ativar", "&aAtivar");
-        double cooldown = plugin.getPlayerCooldownGroup(player).getCooldown();
+        double cooldown = plugin.getPlayerGroup(player).getCooldown();
+        int range = plugin.getPlayerGroup(player).getRange();
         String formattedCooldown = formatCooldown(cooldown);
 
-        String displayName = itemConfig.getString("nome", "").replace("{status}", status).replace("{cooldown}", formattedCooldown);
+        String displayName = itemConfig.getString("nome", "")
+                .replace("{status}", status)
+                .replace("{cooldown}", formattedCooldown)
+                .replace("{range}", String.valueOf(range));
         meta.setDisplayName(colorUtils.colorize(displayName));
 
         List<String> lore = itemConfig.getStringList("lore").stream()
-                .map(line -> line.replace("{status}", status).replace("{cooldown}", formattedCooldown))
+                .map(line -> line.replace("{status}", status)
+                        .replace("{cooldown}", formattedCooldown)
+                        .replace("{range}", String.valueOf(range)))
                 .map(colorUtils::colorize)
                 .collect(Collectors.toList());
         meta.setLore(lore);

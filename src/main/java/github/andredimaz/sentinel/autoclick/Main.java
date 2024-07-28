@@ -1,16 +1,12 @@
 package github.andredimaz.sentinel.autoclick;
 
 import github.andredimaz.sentinel.autoclick.commands.cmdAutoClicker;
-import github.andredimaz.sentinel.autoclick.groups.CooldownGroup;
 import github.andredimaz.sentinel.autoclick.listeners.AutoClickerListener;
 import github.andredimaz.sentinel.autoclick.tasks.AutoClickerTask;
+import github.andredimaz.sentinel.autoclick.utils.GroupManager;
 import github.andredimaz.sentinel.autoclick.utils.MenuUtils;
 import github.andredimaz.sentinel.autoclick.utils.colorUtils;
-import github.andredimaz.sentinel.autoclick.utils.materialUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -23,7 +19,7 @@ import java.util.logging.Level;
 public final class Main extends JavaPlugin {
 
     private Set<EntityType> blacklistedMobs;
-    private List<CooldownGroup> cooldownGroups;
+    private List<GroupManager> cooldownGroups;
     public MenuUtils menuUtils;
 
     @Override
@@ -80,13 +76,14 @@ public final class Main extends JavaPlugin {
 
     private void loadCooldownGroups() {
         cooldownGroups = new ArrayList<>();
-        for (String group : getConfig().getConfigurationSection("cooldown").getKeys(false)) {
-            int ordem = getConfig().getInt("cooldown." + group + ".ordem", Integer.MAX_VALUE);
-            double cooldown = getConfig().getDouble("cooldown." + group + ".cooldown");
-            String permission = getConfig().getString("cooldown." + group + ".permissao");
-            cooldownGroups.add(new CooldownGroup(ordem, cooldown, permission));
+        for (String group : getConfig().getConfigurationSection("grupos").getKeys(false)) {
+            int ordem = getConfig().getInt("grupos." + group + ".ordem", Integer.MAX_VALUE);
+            double cooldown = getConfig().getDouble("grupos." + group + ".cooldown");
+            int range = getConfig().getInt("grupos." + group + ".range");
+            String permission = getConfig().getString("grupos." + group + ".permissao");
+            cooldownGroups.add(new GroupManager(ordem, cooldown, range, permission));
         }
-        cooldownGroups.sort(Comparator.comparingInt(CooldownGroup::getOrder));
+        cooldownGroups.sort(Comparator.comparingInt(GroupManager::getOrder));
     }
 
     public boolean isBlacklisted(EntityType type) {
@@ -94,8 +91,8 @@ public final class Main extends JavaPlugin {
     }
 
     public void startAutoClicker(Player player) {
-        CooldownGroup group = getPlayerCooldownGroup(player);
-        BukkitTask task = new AutoClickerTask(this, player, group.getCooldown()).runTaskTimer(this, 0L, (long) (group.getCooldown() * 20));
+        GroupManager group = getPlayerGroup(player);
+        BukkitTask task = new AutoClickerTask(this, player, group.getCooldown(), group.getRange()).runTaskTimer(this, 0L, (long) (group.getCooldown() * 20));
         player.setMetadata("autoclicker_task", new FixedMetadataValue(this, task));
         String message = getConfig().getString("mensagens.ativado");
         if (message != null && !message.isEmpty()) {
@@ -112,27 +109,17 @@ public final class Main extends JavaPlugin {
             if (message != null && !message.isEmpty()) {
                 player.sendMessage(colorUtils.colorize(message));
             }
+        } else {
+            player.sendMessage(colorUtils.colorize("Autoclicker não está ativado."));
         }
     }
 
-    public CooldownGroup getPlayerCooldownGroup(Player player) {
-        for (CooldownGroup group : cooldownGroups) {
+    public GroupManager getPlayerGroup(Player player) {
+        for (GroupManager group : cooldownGroups) {
             if (group.hasPermission(player)) {
                 return group;
             }
         }
         return cooldownGroups.get(cooldownGroups.size() - 1); // Retorna o grupo de menor prioridade se nenhum outro corresponder
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            if (command.getName().equalsIgnoreCase("autoclick")) {
-                menuUtils.openMenu(player);
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -12,11 +12,13 @@ public class AutoClickerTask extends BukkitRunnable {
     private final Main plugin;
     private final Player player;
     private final double cooldown;
+    private final int range;
 
-    public AutoClickerTask(Main plugin, Player player, double cooldown) {
+    public AutoClickerTask(Main plugin, Player player, double cooldown, int range) {
         this.plugin = plugin;
         this.player = player;
         this.cooldown = cooldown;
+        this.range = range;
     }
 
     @Override
@@ -28,7 +30,7 @@ public class AutoClickerTask extends BukkitRunnable {
 
         ItemStack itemInHand = player.getInventory().getItemInHand();
 
-        for (Entity entity : player.getNearbyEntities(5, 5, 5)) {
+        for (Entity entity : player.getNearbyEntities(range, range, range)) {
             if (entity instanceof LivingEntity && !(entity instanceof Player)) {
                 LivingEntity target = (LivingEntity) entity;
                 if (!plugin.isBlacklisted(target.getType())) {

@@ -2,14 +2,16 @@ mobs-blacklist:
   - 'COW'
   - 'CHICKEN'
 
-cooldown:
+grupos:
   vip:
     ordem: 1
     cooldown: 1
+    range: 1
     permissao: ''
   default:
     ordem: 2
-    cooldown: 2
+    cooldown: 1
+    range: 1
     permissao: ''
 
 menu:
@@ -25,17 +27,17 @@ menu:
       - '&7um único botão.'
       - ''
       - '&f Delay: &7{cooldown} segundos'
+      - '&f Range: &7{range}x{range}'
       - ''
       - '&fClique para {status}&f.'
-
-  #item1:  É possivel criar itens de decoração
-    #slot: 14
-    #material: 'SIGN'
-    #nome: '&6Informação'
-    #lore:
-    #  - '&fDelay: &7{cooldown}'
-    #  - ''
-    #  - ''
+      #item1:  É possivel criar itens de decoração
+      #  slot: 14
+      #  material: 'SIGN'
+      #  nome: '&6Informação'
+      #  lore:
+      #    - '&fDelay: &7{cooldown}'
+      #    - ''
+      #    - ''
 
 mensagens: #deixe vazio para não usar
   ativado: '&aAutoClick ativado com sucesso'
@@ -49,3 +51,4 @@ status:
   ativar: '&aativar'
   desativar: '&cdesativar'
 
+  
